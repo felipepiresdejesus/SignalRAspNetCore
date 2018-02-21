@@ -1,0 +1,54 @@
+﻿@page
+@model SignalR.NetCore.Example.View.Pages.PostsModel
+@{
+    ViewData["Title"] = "Posts";
+    Layout = "~/Pages/_Layout.cshtml";
+}
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+<script src="http://localhost:49230/signalr/hubs"></script>
+
+<h2>Posts</h2>
+
+<input id="txtPost" type="text" placeholder="Enter the value..." />
+<input type="button" id="btnPublishPost" onclick="publishPost()" value="Publish post!" />
+<br />
+<input type="checkbox" id="postUsingSocket" />
+<label for="postUsingSocket">Use Socket</label>
+<ul id="postsList"></ul>
+
+<script>
+    var url = "http://localhost:49230/";
+
+    var hub = $.connection.Post;
+
+    hub.client.notify = notify;
+
+    function notify(value) {
+        $("#postsList").append('<li><b>' + value + '</li><br>');
+    }
+
+    function publishPost() {
+
+        var useSocket = $('#postUsingSocket').is(':checked');
+
+        var data = $("#txtPost").val();
+
+        if (useSocket) {
+            hub.server.post(data);
+        }
+        else {
+
+            $.ajax({
+                url: url + 'api/Post?value=' + data,
+                contentType: "application/json; charset=utf-8",
+                method: 'POST',
+                crossDomain: true,
+            });
+        }
+    };
+
+    $.connection.hub.logging = true;
+    $.connection.hub.url = url + '/signalr';
+    $.connection.hub.start();
+</script>
