@@ -1,8 +1,8 @@
 # SignalRAspNetCore
 SignalR using Asp.Net Core
 
-#Package Source
+# Package Source
 https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json
 
-#SignalR Package
+# SignalR Package
 https://dotnet.myget.org/feed/aspnetcore-dev/package/nuget/Microsoft.AspNetCore.SignalR.Server
